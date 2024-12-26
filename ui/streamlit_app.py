@@ -82,7 +82,7 @@ if uploaded_file:
             if field_name in approved_mappings:
                 field["mapped_to"] = approved_mappings[field_name]
 
-        transformed_df = normalize_data(df, transformed_target_schema)
+        transformed_df = normalize_data(df, transformed_target_schema, approved_mappings)
         st.write("Transformed Data:")
         st.dataframe(transformed_df.head())
 
