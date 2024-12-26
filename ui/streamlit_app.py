@@ -107,11 +107,7 @@ if uploaded_file:
         st.write("Fields in Target Dataset Not in Original Dataset:")
         st.json(empty_target_fields)
 
-        if validation_issues:
-            st.error("Validation Issues Found:")
-            st.write(validation_issues)
-        else:
-            st.success("No Validation Issues!")
+     
 
         # Step 5: Download Transformed Data
         st.download_button("Download Transformed Data", data=transformed_df.to_csv(index=False), file_name="transformed_general_ledger.csv")
