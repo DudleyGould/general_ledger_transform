@@ -1,0 +1,17 @@
+# Virtual environment
+env/
+
+# Logs
+*.log
+logs/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Sensitive files
+.env
+
+# Data files
+data/
+
