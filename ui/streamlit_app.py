@@ -6,6 +6,7 @@ import streamlit as st
 import pandas as pd
 import json
 import time
+import openai
 
 # Load environment variables from .env file
 load_dotenv()
@@ -37,22 +38,43 @@ with open("target_schema.json") as f:
 
 st.title("AI-Powered General Ledger Transformation Tool")
 
-# Step 1: Upload General Ledger File
-uploaded_file = st.file_uploader("Upload your general ledger file (CSV/Excel)")
-if uploaded_file:
-    try:
-        st.info("Loading your file...")
-        time.sleep(1)  # Simulate loading time
-        df = pd.read_csv(uploaded_file)
-        logging.info("Uploaded file loaded successfully.")
-        logging.debug(f"Input columns: {df.columns.tolist()}")
-        st.success("File loaded successfully!")
-    except Exception as e:
-        logging.error(f"Error loading uploaded file: {e}")
-        st.error(f"Error loading file: {e}")
+# Function to query OpenAI API
+def query_openai(prompt):
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    response = openai.Completion.create(
+        engine="davinci-codex",
+        prompt=prompt,
+        max_tokens=150
+    )
+    return response.choices[0].text.strip()
 
-    st.write("Preview of Uploaded Data:")
-    st.dataframe(df.head())
+# Chat with General Ledger Data
+st.subheader("Chat with your General Ledger Data")
+user_query = st.text_input("Enter your question about the general ledger data:")
+if st.button("Submit Query"):
+    if user_query:
+        if 'df' in locals():
+            # Create a prompt for the OpenAI API
+            prompt = f"General Ledger Data:\n{df.head(5).to_string()}\n\nUser Query: {user_query}\n\nResponse:"
+            response = query_openai(prompt)
+            st.write("Response:")
+            st.write(response)
+        else:
+            st.write("Please upload the general ledger data first.")
+    else:
+        st.write("Please enter a query.")
+
+# Step 1: Upload General Ledger File
+uploaded_file = st.file_uploader("Upload your general ledger file", type=["csv", "xlsx"])
+
+if uploaded_file:
+    if uploaded_file.name.endswith('.csv'):
+        df = pd.read_csv(uploaded_file)
+    else:
+        df = pd.read_excel(uploaded_file)
+    
+    st.write("General Ledger Data:")
+    st.dataframe(df)
 
     # Step 2: Suggest Field Mappings
     st.subheader("AI-Generated Field Mappings")
