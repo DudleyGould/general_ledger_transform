@@ -42,13 +42,16 @@ st.title("AI-Powered General Ledger Transformation Tool")
 def query_openai(prompt):
     openai.api_key = os.getenv("OPENAI_API_KEY")
     logging.debug(f"Querying OpenAI with prompt: {prompt}")
-    response = openai.Completion.create(
-        engine="davinci-codex",
-        prompt=prompt,
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",  # Change the model here
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ],
         max_tokens=150
     )
     logging.debug(f"OpenAI response: {response}")
-    return response.choices[0].text.strip()
+    return response.choices[0].message['content'].strip()
 
 # Chat with General Ledger Data
 st.subheader("Chat with your General Ledger Data")
