@@ -41,11 +41,13 @@ st.title("AI-Powered General Ledger Transformation Tool")
 # Function to query OpenAI API
 def query_openai(prompt):
     openai.api_key = os.getenv("OPENAI_API_KEY")
+    logging.debug(f"Querying OpenAI with prompt: {prompt}")
     response = openai.Completion.create(
         engine="davinci-codex",
         prompt=prompt,
         max_tokens=150
     )
+    logging.debug(f"OpenAI response: {response}")
     return response.choices[0].text.strip()
 
 # Chat with General Ledger Data
