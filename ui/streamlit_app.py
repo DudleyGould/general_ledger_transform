@@ -53,22 +53,6 @@ def query_openai(prompt):
     logging.debug(f"OpenAI response: {response}")
     return response.choices[0].message['content'].strip()
 
-# Chat with General Ledger Data
-st.subheader("Chat with your General Ledger Data")
-user_query = st.text_input("Enter your question about the general ledger data:")
-if st.button("Submit Query"):
-    if user_query:
-        if 'df' in locals():
-            # Create a prompt for the OpenAI API
-            prompt = f"General Ledger Data:\n{df.head(5).to_string()}\n\nUser Query: {user_query}\n\nResponse:"
-            response = query_openai(prompt)
-            st.write("Response:")
-            st.write(response)
-        else:
-            st.write("Please upload the general ledger data first.")
-    else:
-        st.write("Please enter a query.")
-
 # Step 1: Upload General Ledger File
 uploaded_file = st.file_uploader("Upload your general ledger file", type=["csv", "xlsx"])
 
