@@ -119,14 +119,6 @@ if uploaded_file:
             logging.error(f"Error during transformation: {e}")
             st.error(f"Error during transformation: {e}")
 
-        # Step 4: Validation
-        st.subheader("Validation Results")
-        validation_issues = validate_data(transformed_df, transformed_target_schema)
-        if validation_issues:
-            st.error("Validation Issues Found:")
-            st.write(validation_issues)
-        else:
-            st.success("No Validation Issues Found!")
 
         # Mapping Summary
         mapped_fields = {k: v for k, v in approved_mappings.items() if v is not None}
